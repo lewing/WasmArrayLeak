@@ -20,6 +20,13 @@
 </br>
 
 </br>
+<button id="sendRequest">Send Request</button>
+</br>
+<button id="sendRequests">Send Requests</button>
+
+</br>
+
+</br>
 
     <script type="text/javascript" src="mono-config.js"></script>
     <script type="text/javascript" src="runtime.js"></script>
@@ -106,6 +113,17 @@
 
             }
         );
+
+        var sendRequest = document.getElementById("sendRequest");
+        
+        sendRequest.addEventListener("click", (me,ev) =>
+            {
+                
+                // method to be executed;
+                App.sendRequest();
+
+            }
+        );
         var App = {
             
             init: function () {
@@ -181,6 +199,19 @@
                 console.log("Total Memory AllocByteBuffer: " + ++requests + " WA: " + TOTAL_MEMORY);
 
             },
+
+            sendRequest: function () {
+                if (typeof httpRequest == "undefined")
+                     httpRequest = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:HttpClientRequest");
+                httpRequest();
+            },			
+            sendRequests: function () {
+                setInterval(function() {
+                    // method to be executed;
+                    App.httpRequest();
+                }, 1000);
+            },
+
 
 
         };

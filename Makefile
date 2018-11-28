@@ -11,17 +11,20 @@ MANAGE_CONF=debug
 # WASM_SDK_FRAMEWORK=$(WASM_SDK)/framework
 # WASM_SDK_PACKAGER=$(WASM_SDK)
    WASM_SDK=$(TOP)../../projects/mono/sdks/out/wasm-bcl/wasm
-   WASM_SDK_FRAMEWORK=$(TOP)../../projects/mono/sdks/wasm
+   WASM_SDK_FRAMEWORK=$(TOP)/../../projects/mono/sdks/wasm
    WASM_SDK_PACKAGER=$(TOP)/../../projects/mono/sdks/wasm
 
 ASSETS = \
     --asset=index.html   \
+    --asset=NowIsTheTime.txt   \
+    --asset=SampleJPGImage_30mbmb.jpg   \
+
 
 $(TOP)/mono/:
 	mkdir -p $@
 
 .stamp-wasm-bcl: | $(TOP)/mono/
-	curl -L 'https://jenkins.mono-project.com/job/test-mono-mainline-wasm/1453/label=ubuntu-1804-amd64/Azure/processDownloadRequest/1453/ubuntu-1804-amd64/sdks/wasm/mono-wasm-aa50145d121.zip' -o "mono-wasm.zip" -#
+	curl -L 'https://jenkins.mono-project.com/job/test-mono-mainline-wasm/1519/label=ubuntu-1804-amd64/Azure/processDownloadRequest/1519/ubuntu-1804-amd64/sdks/wasm/mono-wasm-5514c173c34.zip' -o "mono-wasm.zip" -#
 	unzip mono-wasm.zip -d $(TOP)/mono/sdks
 	touch $@
 

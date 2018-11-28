@@ -11,5 +11,12 @@
     <Reference Include="WebAssembly.Bindings">
       <HintPath>mono\sdks\framework\WebAssembly.Bindings.dll</HintPath>
     </Reference>
+    <Reference Include="WebAssembly.Net.Http">
+      <HintPath>..\mono\sdks\wasm\WebAssembly.Net.Http.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="publish\mono.wasm" />
+    <None Remove="publish\index.html" />
   </ItemGroup>
 </Project>
