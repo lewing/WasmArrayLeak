@@ -5,7 +5,7 @@ DRIVER_CONF=--debugrt
 #DRIVER_CONF=
 
 #Use either 'release' or 'debug' dependending on what you need
-DOM_CONF=debug
+MANAGE_CONF=debug
 
 # WASM_SDK=$(TOP)/mono/sdks
 # WASM_SDK_FRAMEWORK=$(WASM_SDK)/framework
@@ -13,9 +13,6 @@ DOM_CONF=debug
    WASM_SDK=$(TOP)../../projects/mono/sdks/out/wasm-bcl/wasm
    WASM_SDK_FRAMEWORK=$(TOP)../../projects/mono/sdks/wasm
    WASM_SDK_PACKAGER=$(TOP)/../../projects/mono/sdks/wasm
-
-APP_SOURCES = \
-	./Hello.cs
 
 ASSETS = \
     --asset=index.html   \
@@ -32,7 +29,7 @@ $(TOP)/mono/:
 wasmbcl: .stamp-wasm-bcl
 
 WasmArrayLeak.dll: Program.cs
-	msbuild WasmArrayLeak.csproj /p:configuration=$(DOM_CONF)
+	msbuild WasmArrayLeak.csproj /p:configuration=$(MANAGE_CONF)
 
 gen-runtime:
 	mono $(WASM_SDK_PACKAGER)/packager.exe ${DRIVER_CONF} --copy=ifnewer --out=publish --prefix=./bin/Debug/netstandard2.0 ${ASSETS} WasmArrayLeak.dll
