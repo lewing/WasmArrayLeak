@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Wasm Array Leak</title>
+</head>
+<body>
+        
+
+<button id="byteBuffer">PassByteBuffer Small</button>
+</br>
+<button id="byteBufferMed">PassByteBuffer Medium</button>
+</br>
+<button id="byteBufferLarge">PassByteBuffer Large</button>
+</br>
+<button id="allocBuffer">Alloc ByteBuffer Small</button>
+</br>
+<button id="allocBufferMed">Alloc ByteBuffer Medium</button>
+</br>
+<button id="allocBufferLarge">Alloc ByteBuffer Large</button>
+</br>
+
+</br>
+
+    <script type="text/javascript" src="mono-config.js"></script>
+    <script type="text/javascript" src="runtime.js"></script>
+
+    <script type="text/javascript">
+
+
+        var byteBuffer = document.getElementById("byteBuffer");
+        
+        byteBuffer.addEventListener("click", (me,ev) =>
+            {
+                
+                setInterval(function() {
+                    // method to be executed;
+                    App.passByteBuffer();
+                }, 500);
+
+            }
+        );
+        var byteBufferMed = document.getElementById("byteBufferMed");
+        
+        byteBufferMed.addEventListener("click", (me,ev) =>
+            {
+                
+                setInterval(function() {
+                    // method to be executed;
+                    App.passByteBufferMedium();
+                }, 1000);
+
+            }
+        );
+        var byteBufferLarge = document.getElementById("byteBufferLarge");
+        
+        byteBufferLarge.addEventListener("click", (me,ev) =>
+            {
+                
+                //setInterval(function() {
+                    // method to be executed;
+                    App.passByteBufferLarge();
+                //}, 1000);
+
+            }
+        );
+
+        var allocBuffer = document.getElementById("allocBuffer");
+        var requests = 0;
+        allocBuffer.addEventListener("click", (me,ev) =>
+            {
+                
+                var allocate = setInterval(function() {
+                    try {
+                        // method to be executed;
+                        App.allocByteBuffer();
+                    }
+                    catch {
+                        console.log("Total Memory AllocByteBuffer: " + requests + " WA: " + TOTAL_MEMORY);
+                        clearInterval(allocate);
+                    }
+                }, 500);
+
+            }
+        );
+        var allocBufferMed = document.getElementById("allocBufferMed");
+        
+        allocBufferMed.addEventListener("click", (me,ev) =>
+            {
+                
+                //setInterval(function() {
+                    // method to be executed;
+                    App.allocByteBufferMedium();
+                //}, 1000);
+
+            }
+        );
+        var allocBufferLarge = document.getElementById("allocBufferLarge");
+        
+        allocBufferLarge.addEventListener("click", (me,ev) =>
+            {
+                
+                setInterval(function() {
+                    // method to be executed;
+                    App.allocByteBufferLarge();
+                }, 500);
+
+            }
+        );
+        var App = {
+            
+            init: function () {
+                BINDING.call_static_method("[WasmArrayLeak]WasmArrayLeak.Program:Main", [null]);
+                console.log("Total Memory Exit WASM: " + TOTAL_MEMORY);
+            },
+            passByteBuffer: function () {
+                if (typeof passByteBuffer === "undefined")
+                {
+                    passByteBuffer = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:PassByteBuffer");
+                }
+                var buffer = new Uint8Array(500000);  // eats memory
+                passByteBuffer(buffer);
+                console.log("Total Memory PassByteBuffer: " + ++requests + " WA: " + TOTAL_MEMORY);
+
+            },
+
+            passByteBufferMedium: function () {
+
+                
+                var buffer = new Uint8Array(5000000);  // does not eat memory
+                if (typeof passByteBuffer === "undefined")
+                {
+                    passByteBuffer = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:PassByteBuffer");
+                }
+                var buffer = new Uint8Array(500000);  // eats memory
+                passByteBuffer(buffer);
+                console.log("Total Memory PassByteBuffer: " + ++requests + " WA: " + TOTAL_MEMORY);
+
+            },
+
+            passByteBufferLarge: function () {
+
+                
+                var buffer = new Uint8Array(50000000);  // does not eat memory
+                if (typeof passByteBuffer === "undefined")
+                {
+                    passByteBuffer = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:PassByteBuffer");
+                }
+                var buffer = new Uint8Array(500000);  // eats memory
+                passByteBuffer(buffer);
+                console.log("Total Memory PassByteBuffer: " + ++requests + " WA: " + TOTAL_MEMORY);
+
+            },
+            allocByteBuffer: function () {
+
+                if (typeof allocByteBuffer === "undefined")
+                {
+                    allocByteBuffer = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:AllocByteBuffer");
+                }
+                allocByteBuffer(500000);
+                console.log("Total Memory AllocByteBuffer: " + ++requests + " WA: " + TOTAL_MEMORY);
+            },
+
+            allocByteBufferMedium: function () {
+
+                if (typeof allocByteBuffer === "undefined")
+                {
+                    allocByteBuffer = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:AllocByteBuffer");
+                }
+                allocByteBuffer(5000000);
+                console.log("Total Memory AllocByteBuffer: " + ++requests + " WA: " + TOTAL_MEMORY);
+
+            },
+
+            allocByteBufferLarge: function () {
+
+                if (typeof allocByteBuffer === "undefined")
+                {
+                    allocByteBuffer = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:AllocByteBuffer");
+                }
+                allocByteBuffer(50000000);
+                console.log("Total Memory AllocByteBuffer: " + ++requests + " WA: " + TOTAL_MEMORY);
+
+            },
+
+
+        };
+
+    </script>
+
+    <script defer src="mono.js"></script>
+</body>
+</html>
