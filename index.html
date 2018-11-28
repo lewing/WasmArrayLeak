@@ -131,11 +131,11 @@
                 console.log("Total Memory Exit WASM: " + TOTAL_MEMORY);
             },
             passByteBuffer: function () {
+                var buffer = new Uint8Array(500000);  // eats memory
                 if (typeof passByteBuffer === "undefined")
                 {
                     passByteBuffer = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:PassByteBuffer");
                 }
-                var buffer = new Uint8Array(500000);  // eats memory
                 passByteBuffer(buffer);
                 console.log("Total Memory PassByteBuffer: " + ++requests + " WA: " + TOTAL_MEMORY);
 
@@ -149,7 +149,6 @@
                 {
                     passByteBuffer = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:PassByteBuffer");
                 }
-                var buffer = new Uint8Array(500000);  // eats memory
                 passByteBuffer(buffer);
                 console.log("Total Memory PassByteBuffer: " + ++requests + " WA: " + TOTAL_MEMORY);
 
@@ -163,7 +162,6 @@
                 {
                     passByteBuffer = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:PassByteBuffer");
                 }
-                var buffer = new Uint8Array(500000);  // eats memory
                 passByteBuffer(buffer);
                 console.log("Total Memory PassByteBuffer: " + ++requests + " WA: " + TOTAL_MEMORY);
 
