@@ -341,3 +341,4 @@ mono/*
 publish/*
 mono-wasm.zip
 .stamp-wasm-bcl
+WasmArrayLeak.dll

@@ -124,6 +124,17 @@
 
             }
         );
+        var sendRequests = document.getElementById("sendRequests");
+        
+        sendRequests.addEventListener("click", (me,ev) =>
+            {
+                
+                // method to be executed;
+                App.sendRequests();
+
+            }
+        );
+
         var App = {
             
             init: function () {
@@ -202,12 +213,21 @@
                 if (typeof httpRequest == "undefined")
                      httpRequest = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:HttpClientRequest");
                 httpRequest();
+                console.log("Total Memory SendRequest: " + ++requests + " WA: " + TOTAL_MEMORY);
             },			
             sendRequests: function () {
-                setInterval(function() {
-                    // method to be executed;
-                    App.httpRequest();
-                }, 1000);
+
+                var requests = setInterval(function() {
+                    try {
+                        // method to be executed;
+                        App.sendRequest();
+                    }
+                    catch {
+                        console.log("Total Memory SendRequests: " + requests + " WA: " + TOTAL_MEMORY);
+                        clearInterval(requests);
+                    }
+                }, 2000);
+
             },
 
 

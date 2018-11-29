@@ -7,12 +7,8 @@ DRIVER_CONF=--debugrt
 #Use either 'release' or 'debug' dependending on what you need
 MANAGE_CONF=debug
 
-# WASM_SDK=$(TOP)/mono/sdks
-# WASM_SDK_FRAMEWORK=$(WASM_SDK)/framework
-# WASM_SDK_PACKAGER=$(WASM_SDK)
-   WASM_SDK=$(TOP)../../projects/mono/sdks/out/wasm-bcl/wasm
-   WASM_SDK_FRAMEWORK=$(TOP)/../../projects/mono/sdks/wasm
-   WASM_SDK_PACKAGER=$(TOP)/../../projects/mono/sdks/wasm
+WASM_DIR=
+
 
 ASSETS = \
     --asset=index.html   \
@@ -32,15 +28,28 @@ $(TOP)/mono/:
 wasmbcl: .stamp-wasm-bcl
 
 WasmArrayLeak.dll: Program.cs
-	msbuild WasmArrayLeak.csproj /p:configuration=$(MANAGE_CONF)
+	csc /target:library -out:$@ /r:$(WASM_DIR)/System.Net.Http.dll /r:$(WASM_DIR_FRAMEWORK)/WebAssembly.Bindings.dll /r:$(WASM_DIR_FRAMEWORK)/WebAssembly.Net.Http.dll Program.cs 
 
 gen-runtime:
-	mono $(WASM_SDK_PACKAGER)/packager.exe ${DRIVER_CONF} --copy=ifnewer --out=publish --prefix=./bin/Debug/netstandard2.0 ${ASSETS} WasmArrayLeak.dll
+	mono $(WASM_DIR_PACKAGER)/packager.exe ${DRIVER_CONF} --copy=ifnewer --out=publish ${ASSETS} WasmArrayLeak.dll
 
 
 build-managed: WasmArrayLeak.dll gen-runtime
 
-build: wasmbcl build-managed
+set_wasm_dir:
+	$(eval WASM_DIR=$(WASM_SDK)/out/wasm-bcl/wasm)
+	$(eval WASM_DIR_FRAMEWORK=$(WASM_SDK)/wasm)
+	$(eval WASM_DIR_PACKAGER=$(WASM_SDK)/wasm)
+
+set_wasm_sdk_dir:
+	$(eval WASM_DIR=$(TOP)/mono/sdks/wasm-bcl/wasm)
+	$(eval WASM_DIR_FRAMEWORK=$(TOP)/mono/sdks/framework)
+	$(eval WASM_DIR_PACKAGER=$(TOP)/mono/sdks)
+
+build: set_wasm_dir build-managed
+
+build-sdks: wasmbcl set_wasm_sdk_dir build-managed
 
 clean:
 	rm -rf publish
+	rm -f ./WasmArrayLeak.dll
