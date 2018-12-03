@@ -20,7 +20,7 @@ $(TOP)/mono/:
 	mkdir -p $@
 
 .stamp-wasm-bcl: | $(TOP)/mono/
-	curl -L 'https://jenkins.mono-project.com/job/test-mono-mainline-wasm/1519/label=ubuntu-1804-amd64/Azure/processDownloadRequest/1519/ubuntu-1804-amd64/sdks/wasm/mono-wasm-5514c173c34.zip' -o "mono-wasm.zip" -#
+	curl -L 'https://jenkins.mono-project.com/job/test-mono-mainline-wasm/1558/label=ubuntu-1804-amd64/Azure/processDownloadRequest/1558/ubuntu-1804-amd64/sdks/wasm/mono-wasm-c99d2de68ef.zip' -o "mono-wasm.zip" -#
 	unzip mono-wasm.zip -d $(TOP)/mono/sdks
 	touch $@
 

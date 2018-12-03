@@ -217,14 +217,14 @@
             },			
             sendRequests: function () {
 
-                var requests = setInterval(function() {
+                var sendthem = setInterval(function() {
                     try {
                         // method to be executed;
                         App.sendRequest();
                     }
                     catch {
                         console.log("Total Memory SendRequests: " + requests + " WA: " + TOTAL_MEMORY);
-                        clearInterval(requests);
+                        clearInterval(sendthem);
                     }
                 }, 2000);
 

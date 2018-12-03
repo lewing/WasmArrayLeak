@@ -39,8 +39,8 @@ namespace WasmArrayLeak
         {
             checkHttpClient();
 
-            //string ApiFile = "NowIsTheTime.txt";
-            string ApiFile = "SampleJPGImage_30mbmb.jpg";
+            string ApiFile = "NowIsTheTime.txt";
+            //string ApiFile = "SampleJPGImage_30mbmb.jpg";
 
             Console.WriteLine($"streaming supported: { WasmHttpMessageHandler.StreamingSupported}");
             //WasmHttpMessageHandler.StreamingEnabled = false;
