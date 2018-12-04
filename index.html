@@ -23,7 +23,8 @@
 <button id="sendRequest">Send Request</button>
 </br>
 <button id="sendRequests">Send Requests</button>
-
+<br>
+<button id="sendBlobRequest">Send Blob Request</button>
 </br>
 
 </br>
@@ -32,7 +33,8 @@
     <script type="text/javascript" src="runtime.js"></script>
 
     <script type="text/javascript">
-
+        var blob = new Blob([JSON.stringify({hello: "world"}, null, 2)], {type : 'application/json'});
+        var blobUrl = URL.createObjectURL(blob);
 
         var byteBuffer = document.getElementById("byteBuffer");
         
@@ -124,6 +126,16 @@
 
             }
         );
+        var sendblobRequest = document.getElementById("sendBlobRequest");
+        
+        sendBlobRequest.addEventListener("click", (me,ev) =>
+            {
+                
+                // method to be executed;
+                App.sendRequest(blobUrl);
+
+            }
+        );
         var sendRequests = document.getElementById("sendRequests");
         
         sendRequests.addEventListener("click", (me,ev) =>
@@ -209,12 +221,12 @@
 
             },
 
-            sendRequest: function () {
+            sendRequest: function (url) {
                 if (typeof httpRequest == "undefined")
                      httpRequest = BINDING.bind_static_method("[WasmArrayLeak]WasmArrayLeak.Program:HttpClientRequest");
-                httpRequest();
+                httpRequest(url || "NowIsTheTime.txt");
                 console.log("Total Memory SendRequest: " + ++requests + " WA: " + TOTAL_MEMORY);
-            },			
+            },
             sendRequests: function () {
 
                 var sendthem = setInterval(function() {

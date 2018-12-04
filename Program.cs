@@ -35,13 +35,12 @@ namespace WasmArrayLeak
         static int requests = 0;
         static CancellationTokenSource cts = null;
 
-        private static async void HttpClientRequest()
+        private static async void HttpClientRequest(string url)
         {
             checkHttpClient();
 
-            string ApiFile = "NowIsTheTime.txt";
             //string ApiFile = "SampleJPGImage_30mbmb.jpg";
-
+            Console.WriteLine($"url: {url}");
             Console.WriteLine($"streaming supported: { WasmHttpMessageHandler.StreamingSupported}");
             //WasmHttpMessageHandler.StreamingEnabled = false;
             Console.WriteLine($"streaming enabled: {WasmHttpMessageHandler.StreamingEnabled}");
@@ -49,12 +48,12 @@ namespace WasmArrayLeak
 
             try
             {
-                using (var rspMsg = await httpClient.GetAsync(ApiFile, cts.Token))
+                using (var rspMsg = await httpClient.GetAsync(url, cts.Token))
                 {
                     Console.WriteLine(rspMsg.Content.Headers.ContentLength);
                     using (var respStream = rspMsg.Content?.ReadAsStreamAsync().Result)
                     {
-                        Console.WriteLine($"Request: {++requests}  StreamAsync: {respStream.Length}"); //.Length}");
+                        Console.WriteLine($"Request: {++requests}  StreamAsync: {respStream.Length} Code: {rspMsg.StatusCode}");
                     }
                 }
             }
